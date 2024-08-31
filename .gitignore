@@ -1,0 +1,10 @@
+# Ignorar archivos de configuración y entornos locales
+.env
+.idea/
+node_modules/
+.wwebjs_cache/
+
+# Ignorar otros archivos innecesarios
+*.log
+npm-debug.log*
+node_modules/.package-lock.json
