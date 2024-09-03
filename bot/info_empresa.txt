@@ -1,45 +1,37 @@
-Nombre de la Empresa: ElectronicsJS
+Reseña de la Empresa
+    JSElectronics, fundada en 2020 en La Chorrera, Panamá Oeste, se ha destacado en la venta de laptops, ofreciendo una amplia variedad de marcas y modelos. Con un equipo de 25 empleados altamente capacitados, la empresa se distingue por su asesoramiento personalizado, ayudando a los clientes a encontrar la laptop ideal según sus necesidades y presupuesto. La ubicación estratégica de la tienda ha sido clave para su éxito, atrayendo tanto a residentes locales como a visitantes de la Ciudad de Panamá y áreas circundantes.
 
-Misión:
-Nuestra misión en ElectronicsJS es ofrecer a nuestros clientes laptops de alta calidad, seleccionadas cuidadosamente para garantizar un rendimiento óptimo y confiabilidad. Nos dedicamos a brindar un servicio excepcional, asegurando que cada experiencia de compra sea satisfactoria, personalizada y memorable.
+Misión
+    Nuestra misión es ofrecer productos que superen las expectativas en rendimiento, diseño y durabilidad, siendo la elección preferida por la combinación de tecnología avanzada y estilo. Nos comprometemos con la excelencia en el servicio al cliente y la asesoría técnica para garantizar una experiencia completa y satisfactoria.
 
-Visión:
-Convertirnos en el referente principal en la venta de laptops y accesorios tecnológicos en Ciudad de Panamá, expandiendo nuestra presencia tanto a nivel nacional como internacional, mientras promovemos prácticas sostenibles y un consumo consciente de la tecnología.
+Visión
+    Visualizamos un futuro donde nuestra marca sea sinónimo de innovación y confianza en tecnología portátil, liderando la industria de laptops con productos de última generación. Aspiramos a expandir nuestra presencia global, destacándonos en ventas y en el desarrollo de soluciones tecnológicas que mejoren la vida de las personas.
 
-Valores:
+Políticas de la Empresa
+    Políticas de Garantía
+    Todas nuestras laptops están respaldadas por una garantía de un año. Durante este período, nos comprometemos a reparar o reemplazar cualquier defecto de fabricación sin costo adicional para el cliente.
+    Los clientes deben informar cualquier problema cubierto por la garantía a nuestro servicio de atención al cliente.
+    Se proporcionará un número de reclamación y se instruirá al cliente sobre los pasos a seguir para la reparación del producto.
+    La garantía no cubre daños causados por accidentes, uso indebido, modificaciones no autorizadas o desastres naturales.
+    El cliente es responsable de realizar copias de seguridad de sus datos antes de enviar la laptop para reparación.
 
-Calidad: Nos comprometemos a ofrecer laptops de la más alta calidad, seleccionando cada modelo con un ojo crítico para garantizar durabilidad, rendimiento y satisfacción del cliente.
-Atención al Cliente: Ponemos a nuestros clientes en el centro de todo lo que hacemos. Ofrecemos un servicio personalizado, asesoramiento tecnológico, y una experiencia de compra agradable y sin estrés.
-Sostenibilidad: Estamos comprometidos con la tecnología sostenible. Esto se refleja en nuestras prácticas de compra, elección de materiales y esfuerzos para reducir nuestro impacto ambiental.
-Ubicación:
-ElectronicsJS está estratégicamente ubicado en Avenida Central, Ciudad de Panamá, cerca del casco antiguo. Esta ubicación central nos permite ser accesibles para todos los que deseen disfrutar de una experiencia de compra premium en un entorno histórico y culturalmente rico.
+    Políticas de Promociones
+    Todas las promociones tendrán un periodo de validez claramente establecido.
+    Las promociones estarán sujetas a condiciones específicas de elegibilidad, como la compra de ciertos modelos de laptops, un monto mínimo de compra, o cualquier otro criterio que se considere necesario.
+    Se establecerán limitaciones sobre la cantidad de productos que un cliente puede adquirir con el descuento.
+    Se identificarán claramente productos excluidos y cualquier restricción.
+    La empresa se reserva el derecho de modificar o cancelar una promoción, comunicando cualquier cambio a los clientes.
 
-Horarios de Atención:
+    Políticas de Privacidad y Seguridad
+    La empresa se compromete a recopilar solo la información personal necesaria para llevar a cabo transacciones y proporcionar servicios.
+    La información personal incluye, pero no se limita a, nombres, direcciones, números de teléfono y detalles de pago.
+    Utilizamos tecnologías seguras para procesar todas las transacciones y proteger la información financiera del cliente.
+    Se implementan medidas de seguridad para prevenir accesos no autorizados a sistemas que contengan datos sensibles.
+    La información personal no se compartirá con terceros sin el consentimiento expreso del titular, excepto en casos requeridos por la ley.
 
+
+Horarios
 Lunes a Viernes: 9:00 AM - 8:00 PM
 Sábados y Domingos: 10:00 AM - 6:00 PM
-Productos:
 
-Laptops: Ofrecemos una amplia variedad de laptops, incluyendo modelos para uso profesional, estudiantil y gaming, seleccionadas para satisfacer diferentes necesidades y presupuestos.
-Accesorios: Nuestra colección de accesorios incluye mochilas, fundas, cargadores y periféricos, todos elegidos para complementar tu experiencia tecnológica.
-Componentes: Contamos con una selección diversa de componentes, como discos duros, memorias RAM y tarjetas gráficas, garantizando que nuestros clientes encuentren lo necesario para mejorar o reparar sus laptops.
-Políticas de la Empresa:
 
-Política de Devoluciones: En ElectronicsJS, comprendemos que puede haber ocasiones en que un producto no cumpla con las expectativas de nuestros clientes. Ofrecemos una política de devoluciones flexible, permitiendo cambios o reembolsos dentro de los 30 días posteriores a la compra, siempre que el artículo esté en su condición original y con etiquetas.
-Política de Sostenibilidad: Nos esforzamos por minimizar nuestro impacto ambiental a través de la selección de materiales sostenibles y prácticas de reducción de residuos. Estamos comprometidos a ser transparentes en nuestras cadenas de suministro y a apoyar a los fabricantes que comparten nuestros valores de sostenibilidad.
-Política de Privacidad: Respetamos la privacidad de nuestros clientes. Toda la información personal recopilada durante el proceso de compra se maneja con la máxima confidencialidad y solo se utiliza para mejorar su experiencia de compra.
-Política de Atención al Cliente: Nuestro equipo de atención al cliente está disponible para responder cualquier consulta o inquietud que puedan tener nuestros clientes. Nos esforzamos por resolver cualquier problema de manera rápida y eficiente para garantizar la satisfacción total del cliente.
-Compromiso con los Clientes:
-En ElectronicsJS, estamos comprometidos a exceder las expectativas de nuestros clientes en cada visita. Desde la selección de productos hasta la atención personalizada, nuestro objetivo es crear una experiencia de compra que refleje nuestro compromiso con la calidad y el servicio excepcional. Creemos que cada cliente merece lo mejor, y trabajamos incansablemente para asegurarnos de que así sea.
-
-Contacto:
-
-Teléfono: (+507) 123-4567
-Correo Electrónico: contacto@electronicsjs.com
-Sitio Web: www.electronicsjs.com
-Redes Sociales:
-
-Instagram: @electronicsjs_pa
-Facebook: ElectronicsJS Panamá
-Nota Final:
-Visítanos en ElectronicsJS para descubrir la última tecnología en laptops y accesorios que reflejan tus necesidades y estilo de vida. Nuestro equipo está listo para ayudarte a encontrar exactamente lo que necesitas para llevar tu rendimiento al siguiente nivel.
