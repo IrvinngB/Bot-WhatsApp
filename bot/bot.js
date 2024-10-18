@@ -8,6 +8,8 @@ const socketIo = require('socket.io');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const fs = require('fs');
 const path = require('path');
+const pausedUsers = {}; // Objeto para almacenar el estado pausado de cada usuario
+
 
 // Verificar si la clave de API está configurada
 if (!process.env.GEMINI_API_KEY) {
@@ -179,10 +181,17 @@ whatsappClient.on('ready', () => {
 });
 
 whatsappClient.on('message', async message => {
+    const contactId = message.from;
+
+    // Verificar si el usuario está pausado (pidió hablar con una persona real)
+    if (pausedUsers[contactId]) {
+        console.log(`Usuario ${contactId} está pausado, mensajes ignorados.`);
+        return; // Ignorar todos los mensajes mientras el bot está pausado
+    }
+
     console.log(`Mensaje recibido: ${message.body}`);
 
     // Ignorar imágenes, stickers, videos, documentos y mensajes de ubicación
-
     if (message.hasMedia) {
         if (message.type === 'audio') {
             console.log('Se te va a comunicar con un asistente real.');
@@ -210,7 +219,23 @@ whatsappClient.on('message', async message => {
     }
 
     let responseText;
-    const contactId = message.from; // Obtener el ID del contacto para manejar el contexto
+
+    if (message.body.toLowerCase().includes('contactar persona real')) {
+        // Pausar la interacción del bot y simular que se está contactando a una persona real
+        message.reply('Conectándote con un asistente humano. Por favor, espera.');
+
+        // Marcar al usuario como pausado
+        pausedUsers[contactId] = true;
+
+        // Reiniciar el bot después de 30 minutos de inactividad
+        setTimeout(() => {
+            console.log(`Reiniciando el bot para el usuario ${contactId} después de 30 minutos de inactividad.`);
+            delete pausedUsers[contactId]; // Quitar la pausa del usuario
+            whatsappClient.sendMessage(contactId, 'El asistente virtual está disponible de nuevo. ¿En qué más puedo ayudarte?');
+        }, 30 * 60 * 1000); // 30 minutos en milisegundos
+
+        return; // Detener el procesamiento de mensajes
+    }
 
     if (message.body.toLowerCase() === 'hola') {
         responseText = '¡Hola! ¿En qué puedo ayudarte con respecto a ElectronicsJS?';
