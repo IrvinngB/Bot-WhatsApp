@@ -1,4 +1,4 @@
-require('dotenv').config();  // Cargar las variables de entorno
+require('dotenv').config(); // Cargar las variables de entorno
 
 const { Client } = require('whatsapp-web.js');
 const qrcode = require('qrcode');
@@ -8,8 +8,8 @@ const socketIo = require('socket.io');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const fs = require('fs');
 const path = require('path');
-const pausedUsers = {}; // Objeto para almacenar el estado pausado de cada usuario
 
+const pausedUsers = {}; // Objeto para almacenar el estado pausado de cada usuario
 
 // Verificar si la clave de API está configurada
 if (!process.env.GEMINI_API_KEY) {
@@ -19,35 +19,20 @@ if (!process.env.GEMINI_API_KEY) {
 // Inicializar Google Generative AI con la clave de API
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-//leer laptops 
-const laptopsFilePath = path.join(__dirname, 'Laptops1.txt');
-let laptops = '';
-
-try {
-    laptops = fs.readFileSync(laptopsFilePath, 'utf8');
-} catch (error) {
-    console.error('Error leyendo el archivo de información de las laptops:', error);
-}
-// Leer el archivo con la información de la empresa
-const companyInfoFilePath = path.join(__dirname, 'info_empresa.txt');
-let companyInfo = '';
-
-try {
-    companyInfo = fs.readFileSync(companyInfoFilePath, 'utf8');
-} catch (error) {
-    console.error('Error leyendo el archivo de información de la empresa:', error);
+// Leer archivos necesarios
+function loadFile(filePath, defaultValue = '') {
+    try {
+        return fs.readFileSync(filePath, 'utf8');
+    } catch (error) {
+        console.error(`Error leyendo el archivo ${filePath}:`, error);
+        return defaultValue;
+    }
 }
 
-// Leer el archivo promt.txt
-let promptInstructions = '';
-
-try {
-    const promptFilePath = path.join(__dirname, 'promt.txt');
-    promptInstructions = fs.readFileSync(promptFilePath, 'utf8');
-} catch (error) {
-    console.error('Error leyendo el archivo promt.txt:', error);
-    promptInstructions = ''; // Si no se puede leer, se continúa sin instrucciones adicionales
-}
+// Cargar información desde archivos
+const laptops = loadFile(path.join(__dirname, 'Laptops1.txt'));
+const companyInfo = loadFile(path.join(__dirname, 'info_empresa.txt'));
+const promptInstructions = loadFile(path.join(__dirname, 'promt.txt'));
 
 // Crear un objeto para almacenar el contexto de cada usuario
 const contextStore = {};
@@ -68,24 +53,18 @@ async function generateResponse(userMessage, contactId) {
 
         2. **Responder Solicitudes de Información:** Atender preguntas sobre los productos disponibles, incluyendo componentes y especificaciones de las laptops listadas.
 
-        3. **Agendar Recordatorios:** Crear recordatorios para los clientes en un tiempo específico o en una fecha y hora concreta.
+        3. **Verificar Horarios de Apertura:** Antes de responder preguntas sobre la tienda, verifica si está abierta según la zona horaria de Panamá.
 
-        4. **Verificar Horarios de Apertura:** Antes de responder preguntas sobre la tienda, verifica si está abierta según la zona horaria de Panamá.
+        4. **Manejar Preguntas Generales:** Si recibes preguntas no relacionadas con ElectronicsJS, indica que solo puedes proporcionar información sobre la empresa y sus productos.
 
-        5. **Manejar Preguntas Generales:** Si recibes preguntas no relacionadas con ElectronicsJS, indica que solo puedes proporcionar información sobre la empresa y sus productos.
-
-        6. **Respetar Privacidad:** No puedes divulgar información personal o sensible de los clientes ni información confidencial de la empresa.
-
-        NOTA: Por el momento la opcion de recordatorios esta bloqueada, no se le mecionara al usuario.
+        5. **Respetar Privacidad:** No puedes divulgar información personal o sensible de los clientes ni información confidencial de la empresa.
 
         **Información de Referencia:**
         - **ElectronicsJS:** ${companyInfo}
         - **Laptops Disponibles:** ${laptops}
         - **Contexto del Usuario:** ${userContext}
 
-        Responde de manera clara, directa y breve a la siguiente solicitud del cliente: "${userMessage}".
-        `;
-
+        Responde de manera clara, directa y breve a la siguiente solicitud del cliente: "${userMessage}".`;
 
         const result = await model.generateContent(customPrompt);
         const response = await result.response;
@@ -118,54 +97,10 @@ function isStoreOpen() {
     return false;
 }
 
-// Función para agendar un recordatorio en minutos u horas
-function scheduleReminder(timeAmount, timeUnit, message, contact) {
-    let timeInMs;
-    if (timeUnit === 'minutos') {
-        timeInMs = timeAmount * 60 * 1000;
-    } else if (timeUnit === 'horas') {
-        timeInMs = timeAmount * 60 * 60 * 1000;
-    }
-
-    setTimeout(() => {
-        contact.reply(`Recordatorio: ${message}`);
-    }, timeInMs);
-}
-
-// Función para agendar un recordatorio en una fecha y hora específica
-function scheduleReminderAt(dateTime, message, contact) {
-    const now = new Date();
-    const timeUntilReminder = dateTime - now;
-
-    if (timeUntilReminder > 0) {
-        setTimeout(() => {
-            contact.reply(`Recordatorio: ${message}`);
-        }, timeUntilReminder);
-    } else {
-        contact.reply("La fecha y hora especificadas ya han pasado. No puedo programar un recordatorio para un momento en el pasado.");
-    }
-}
-
-// Función para reformular la solicitud de recordatorio con IA
-async function correctReminderRequest(messageBody, contactId) {
-    const correctionPrompt = `
-    Un cliente ha intentado programar un recordatorio con el siguiente mensaje: "${messageBody}".
-    Ayúdalo a reformular su solicitud para que sea más clara y precisa. Aquí tienes algunos ejemplos correctos:
-    
-    - "Recordatorio en 30 minutos para revisar las nuevas laptops."
-    - "Recordatorio mañana a las 9:00 AM para revisar las ofertas."
-    
-    Reformula la solicitud del cliente para que cumpla con estos formatos.`;
-
-    const correctedResponse = await generateResponse(correctionPrompt, contactId);
-    return correctedResponse;
-}
-
 // Configurar el cliente de WhatsApp Web
 const whatsappClient = new Client();
 
 whatsappClient.on('qr', (qr) => {
-    // Generar el código QR en base64 y enviarlo al frontend a través de Socket.IO
     qrcode.toDataURL(qr, (err, qrCodeUrl) => {
         if (err) {
             console.error('Error generando el QR:', err);
@@ -191,31 +126,20 @@ whatsappClient.on('message', async message => {
 
     console.log(`Mensaje recibido: ${message.body}`);
 
-    // Ignorar imágenes, stickers, videos, documentos y mensajes de ubicación
     if (message.hasMedia) {
         if (message.type === 'audio') {
-            console.log('Se te va a comunicar con un asistente real.');
             message.reply('Se te va a comunicar con un asistente real.');
-            return; // Salir de la función y no procesar más
-        } else if (
-            message.type === 'sticker' || 
-            message.type === 'image' || 
-            message.type === 'video' || 
-            message.type === 'document' || 
-            message.type === 'location'
-        ) {
-            console.log('Mensaje ignorado por ser multimedia.');
-            return; // Salir de la función y no procesar más
+            return;
+        } else if (['sticker', 'image', 'video', 'document', 'location'].includes(message.type)) {
+            return;
         }
     }
 
-    // Simple filtro de spam basado en contenido repetitivo
-    const spamWords = ['spam', 'publicidad', 'promo']; // Palabras claves para identificar spam
+    const spamWords = ['spam', 'publicidad', 'promo'];
     const isSpam = spamWords.some(word => message.body.toLowerCase().includes(word));
 
     if (isSpam) {
-        console.log('Mensaje ignorado por ser considerado spam.');
-        return; // Salir de la función y no procesar
+        return;
     }
 
     let responseText;
@@ -227,69 +151,18 @@ whatsappClient.on('message', async message => {
         // Marcar al usuario como pausado
         pausedUsers[contactId] = true;
 
-        // Reiniciar el bot después de 30 minutos de inactividad
+        // Reiniciar el bot después de 1 hora de inactividad
         setTimeout(() => {
-            console.log(`Reiniciando el bot para el usuario ${contactId} después de 30 minutos de inactividad.`);
+            console.log(`Reiniciando el bot para el usuario ${contactId} después de 1 hora de inactividad.`);
             delete pausedUsers[contactId]; // Quitar la pausa del usuario
             whatsappClient.sendMessage(contactId, 'El asistente virtual está disponible de nuevo. ¿En qué más puedo ayudarte?');
-        }, 30 * 60 * 1000); // 30 minutos en milisegundos
+        }, 60 * 60 * 1000); // 1 hora en milisegundos
 
         return; // Detener el procesamiento de mensajes
     }
 
     if (message.body.toLowerCase() === 'hola') {
         responseText = '¡Hola! ¿En qué puedo ayudarte con respecto a ElectronicsJS?';
-    } else if (message.body.toLowerCase().startsWith('recordatorio')) {
-        // Parsear el mensaje para detectar el formato correcto
-        const matchTime = message.body.match(/en (\d+)\s?(minutos|horas)/i);
-        const matchDateTime = message.body.match(/el (\d{1,2}) de (\w+) a las (\d{1,2}):(\d{2})\s?(AM|PM)?/i);
-
-        if (matchTime) {
-            const timeAmount = parseInt(matchTime[1], 10);
-            const timeUnit = matchTime[2].toLowerCase();
-            scheduleReminder(timeAmount, timeUnit, 'Es hora de pasar por ElectronicsJS para revisar las nuevas laptops.', message);
-            responseText = `Te enviaré un recordatorio en ${timeAmount} ${timeUnit}.`;
-        } else if (matchDateTime) {
-            const day = parseInt(matchDateTime[1], 10);
-            const monthName = matchDateTime[2].toLowerCase();
-            const hour = parseInt(matchDateTime[3], 10);
-            const minute = parseInt(matchDateTime[4], 10);
-            const period = matchDateTime[5] || 'AM';
-
-            const months = {
-                "enero": 0,
-                "febrero": 1,
-                "marzo": 2,
-                "abril": 3,
-                "mayo": 4,
-                "junio": 5,
-                "julio": 6,
-                "agosto": 7,
-                "septiembre": 8,
-                "octubre": 9,
-                "noviembre": 10,
-                "diciembre": 11
-            };
-
-            const month = months[monthName];
-            let hour24 = hour;
-            if (period.toUpperCase() === 'PM' && hour < 12) {
-                hour24 += 12;
-            } else if (period.toUpperCase() === 'AM' && hour === 12) {
-                hour24 = 0;
-            }
-
-            const now = new Date();
-            const year = now.getFullYear();
-            const reminderDate = new Date(year, month, day, hour24, minute);
-
-            scheduleReminderAt(reminderDate, 'Es hora de pasar por ElectronicsJS para revisar las nuevas laptops.', message);
-            responseText = `Te enviaré un recordatorio el ${day} de ${monthName} a las ${hour}:${minute} ${period}.`;
-        } else {
-            // Usar IA para ayudar a reformular la solicitud de recordatorio
-            responseText = await correctReminderRequest(message.body, contactId);
-            responseText += "\nPor favor, intenta de nuevo con este formato sugerido.";
-        }
     } else {
         // Verificar si la tienda está abierta en horario de Panamá
         if (isStoreOpen()) {
@@ -302,7 +175,6 @@ whatsappClient.on('message', async message => {
 
     message.reply(responseText);
 });
-
 
 whatsappClient.initialize();
 
