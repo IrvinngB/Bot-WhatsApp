@@ -33,7 +33,6 @@ function loadFile(filePath, defaultValue = '') {
 // Cargar información desde archivos
 const laptops = loadFile(path.join(__dirname, 'Laptops1.txt'));
 const companyInfo = loadFile(path.join(__dirname, 'info_empresa.txt'));
-const promptInstructions = loadFile(path.join(__dirname, 'promt.txt'));
 
 // Crear un objeto para almacenar el contexto de cada usuario
 const contextStore = {};
@@ -98,13 +97,21 @@ function isStoreOpen() {
 }
 
 // Configurar el cliente de WhatsApp Web
-// Configurar el cliente de WhatsApp Web
 const whatsappClient = new Client({
+    authStrategy: new LocalAuth(), // Usa LocalAuth para manejar la autenticación
     puppeteer: {
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, // Utiliza el Ch>
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    },
-    authStrategy: new LocalAuth()
+        headless: true, // Ejecutar en modo headless para VPS
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--single-process',
+            '--disable-gpu',
+        ],
+    }
 });
 
 whatsappClient.on('qr', (qr) => {
@@ -136,6 +143,7 @@ whatsappClient.on('message', async message => {
     if (message.hasMedia) {
         if (message.type === 'audio') {
             message.reply('Se te va a comunicar con un asistente real.');
+            pausedUsers[contactId] = true;
             return;
         } else if (['sticker', 'image', 'video', 'document', 'location'].includes(message.type)) {
             return;
