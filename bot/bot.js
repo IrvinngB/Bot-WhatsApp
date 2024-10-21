@@ -1,6 +1,6 @@
 require('dotenv').config(); // Cargar las variables de entorno
 
-const { Client } = require('whatsapp-web.js');
+const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode');
 const express = require('express');
 const http = require('http');
@@ -8,6 +8,7 @@ const socketIo = require('socket.io');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const fs = require('fs');
 const path = require('path');
+const moment = require('moment-timezone'); // Añadido para manejar la zona horaria de manera precisa
 
 const pausedUsers = {}; // Objeto para almacenar el estado pausado de cada usuario
 
@@ -82,10 +83,9 @@ async function generateResponse(userMessage, contactId) {
 
 // Función para verificar si la tienda está abierta en horario de Panamá
 function isStoreOpen() {
-    const now = new Date();
-    const panamaTime = new Date(now.toLocaleString("en-US", { timeZone: "America/Panama" }));
-    const day = panamaTime.getDay(); // 0: Domingo, 1: Lunes, ..., 6: Sábado
-    const hour = panamaTime.getHours();
+    const panamaTime = moment().tz("America/Panama");
+    const day = panamaTime.day(); // 0: Domingo, 1: Lunes, ..., 6: Sábado
+    const hour = panamaTime.hour();
 
     if (day >= 1 && day <= 5) {
         // Lunes a Viernes
@@ -98,7 +98,14 @@ function isStoreOpen() {
 }
 
 // Configurar el cliente de WhatsApp Web
-const whatsappClient = new Client();
+// Configurar el cliente de WhatsApp Web
+const whatsappClient = new Client({
+    puppeteer: {
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, // Utiliza el Ch>
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    },
+    authStrategy: new LocalAuth()
+});
 
 whatsappClient.on('qr', (qr) => {
     qrcode.toDataURL(qr, (err, qrCodeUrl) => {
